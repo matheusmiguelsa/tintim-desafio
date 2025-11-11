@@ -67,7 +67,13 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"     # pasta de saída do collectstatic
+# só mantenha a linha abaixo se você TIVER uma pasta "static" com arquivos do projeto
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # DRF básico (sem autenticação obrigatória para facilitar testes)
