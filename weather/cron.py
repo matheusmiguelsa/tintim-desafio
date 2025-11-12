@@ -28,13 +28,6 @@ def run_check(force=False):
         return
 
     _last_run = now
-    if temp > cfg.temp_limit_c:
-        msg = f"Temperatura {temp:.1f}°C ultrapassou o limite {cfg.temp_limit_c:.1f}°C."
-        Alert.objects.create(temp_c=temp, limit_c=cfg.temp_limit_c, message=msg)
-
-        notify_email("Alerta de Temperatura", msg)
-        notify_telegram(msg)
-        notify_n8n(msg)   # 🚀 agora envia automaticamente para o n8n
 
     temp = weather_services.get_current_temp(cfg.lat, cfg.lon)
     TemperatureReading.objects.create(temp_c=temp)
@@ -44,3 +37,4 @@ def run_check(force=False):
         Alert.objects.create(temp_c=temp, limit_c=cfg.temp_limit_c, message=message)
         notify_email("Alerta de Temperatura", message)
         notify_telegram(message)
+        notify_n8n(message)   # 🚀 agora envia automaticamente para o n8n
