@@ -3,6 +3,18 @@ from django.core.mail import send_mail
 import requests
 
 
+def notify_n8n(message):
+    """Dispara webhook para o n8n"""
+    url = getattr(settings, "N8N_WEBHOOK_URL", "")
+
+    if not url:
+        return  # Sem URL definida, não envia
+
+    try:
+        requests.post(url, json={"alert": message}, timeout=10)
+    except Exception as e:
+        print(f"[n8n] erro ao enviar: {e}")
+
 def notify_email(subject: str, body: str):
     recipient = settings.NOTIFY_EMAIL_TO or settings.EMAIL_HOST_USER
     if not recipient:

@@ -3,9 +3,10 @@ from django.utils import timezone
 from django.conf import settings as dj
 from .models import Settings, TemperatureReading, Alert
 import weather.services as weather_services
-from .notify import notify_email, notify_telegram
+from .notify import notify_email, notify_telegram, notify_n8n
 
 _last_run = None
+
 
 
 def run_check(force=False):
@@ -27,6 +28,13 @@ def run_check(force=False):
         return
 
     _last_run = now
+    if temp > cfg.temp_limit_c:
+        msg = f"Temperatura {temp:.1f}°C ultrapassou o limite {cfg.temp_limit_c:.1f}°C."
+        Alert.objects.create(temp_c=temp, limit_c=cfg.temp_limit_c, message=msg)
+
+        notify_email("Alerta de Temperatura", msg)
+        notify_telegram(msg)
+        notify_n8n(msg)   # 🚀 agora envia automaticamente para o n8n
 
     temp = weather_services.get_current_temp(cfg.lat, cfg.lon)
     TemperatureReading.objects.create(temp_c=temp)

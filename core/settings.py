@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev")
 DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 ALLOWED_HOSTS = ["matheusmiguelsa.pythonanywhere.com", "localhost", "127.0.0.1"]
+N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL", "")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
